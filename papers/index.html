@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>  &middot; Nyx </title>
+  
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="theme-color" content="#2D2D2D">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<meta name="generator" content="Hugo 0.102.1" />
+
+
+<link rel="stylesheet" href="https://nyx-fuzz.com/css/vec.css">
+
+
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+<link rel="shortcut icon" href="/favicon.ico">
+
+
+<link href="" rel="alternate" type="application/rss+xml" title="Nyx" />
+
+</head>
+
+<body>
+  <header>
+  <nav>
+    <ul>
+      
+      
+      <li class="pull-left ">
+        <a href="https://nyx-fuzz.com">/home/nyx</a>
+      </li>
+      
+      
+      <li class="pull-left ">
+        <a href="/papers">~/papers</a>
+      </li>
+      
+      
+      <li class="pull-left ">
+        <a href="/about_us">~/about_us</a>
+      </li>
+      
+      
+      <li class="pull-left ">
+        <a href="https://github.com/nyx-fuzz/nyx">~/github</a>
+      </li>
+      
+  
+      <li class="pull-right"><a href=""><i class="fas fa-rss"></i></a></li>
+    </ul>
+  </nav>
+</header>
+
+  <div class="content">
+    <section class="post">
+      <h1 class="post-title"><a href="https://nyx-fuzz.com/papers/"></a></h1>
+      <div class="post-content">
+        <h1 id="research">Research</h1>
+<p>Nyx fuzzer was developed at <strong>Ruhr University Bochum</strong> as a research project by <a href="http://www.schumilo.de">Sergej Schumilo</a> and <a href="https://hexgolems.com">Cornelius Aschermann</a> and many co-oauthors: Thorsten Holz, Ali Abbasi, Simon Woerner, Moritz Schloengel, Robert Gawlik, Sebastian Schinzel, Tim Blazytko, Ahmad-Reza Sadeghi, Daniel Teuchert, Patrick Jauernig, and Tommaso Frassetto. The technology powering Nyx was documented and published by multiple papers.</p>
+<h2 id="kafl-hardware-assisted-feedback-fuzzing-for-os-kernels">kAFL: Hardware-Assisted Feedback Fuzzing for OS Kernels</h2>
+<div>
+<a href=kafl.pdf>Paper</a>, 
+<a href=kafl_slides.pdf>Slides</a>,
+<a href="https://www.youtube.com/watch?v=gZ808d7rQYU">Talk</a>,
+<details>
+  <summary>Abstract</summary>
+<p>Many kinds of memory safety vulnerabilities have been endangering software systems for decades. Amongst other
+approaches, fuzzing is a promising technique to unveil various software faults. Recently, feedback-guided fuzzing
+demonstrated its power, producing a steady stream of security-critical software bugs. Most fuzzing efforts—especially
+feedback fuzzing—are limited to user space components of an operating system (OS), although bugs in kernel components
+are more severe, because they allow an attacker to gain access to a system with full privileges. Unfortunately, kernel
+components are difficult to fuzz as feedback mechanisms (i.e., guided code coverage) cannot be easily applied.
+Additionally, non-determinism due to interrupts, kernel threads, statefulness, and similar mechanisms poses problems.
+Furthermore, if a process fuzzes its own kernel, a kernel crash highly impacts the performance of the fuzzer as the OS
+needs to reboot.</p>
+<p>In this paper, we approach the problem of coverage-guided kernel fuzzing in an OS-independent and hardware-assisted way:
+We utilize a hypervisor and Intel’s Processor Trace (PT) technology. This allows us to remain independent of the target
+OS as we just require a small user space component that interacts with the targeted OS. As a result, our approach
+introduces almost no performance overhead, even in cases where the OS crashes, and performs up to 17,000 executions per
+second on an off-the-shelf laptop. We developed a framework called kernel-AFL (kAFL) to assess the security of Linux,
+macOS, and Windows kernel components. Among many crashes, we uncovered several flaws in the ext4 driver for Linux, the
+HFS and APFS file system of macOS, and the NTFS driver of Windows.</p>
+</details>
+</div>
+<pre tabindex="0"><code>@inproceedings{schumilo2017kafl,
+    author = {Schumilo, Sergej and Aschermann, Cornelius and Gawlik, Robert and Schinzel, Sebastian and Holz, Thorsten},
+    title = {{kAFL: Hardware-Assisted Feedback Fuzzing for OS Kernels}},
+    year = {2017},
+    booktitle = {USENIX Security Symposium}
+}
+</code></pre><h2 id="redqueen-fuzzing-with-input-to-state-correspondence">REDQUEEN: Fuzzing with Input-to-State Correspondence</h2>
+<div>
+<a href=redqueen.pdf>Paper</a>, 
+<a href=redqueen_slides.pdf>Slides</a>,
+<a href="https://www.youtube.com/watch?v=9JpanJ29r_U">Talk</a>,
+<details>
+  <summary>Abstract</summary>
+<p>Automated software testing based on fuzzing has experienced a revival in recent years. Especially feedback-driven
+fuzzing has become well-known for its ability to efficiently perform randomized testing with limited input corpora.
+Despite a lot of progress, two common problems are magic numbers and (nested) checksums. Computationally expensive
+methods such as taint tracking and symbolic execution are typically used to overcome such roadblocks. Unfortunately,
+such methods often require access to source code, a rather precise description of the environment (e.g., behavior of
+library calls or the underlying OS), or the exact semantics of the platform&rsquo;s instruction set.</p>
+<p>In this paper, we introduce a lightweight, yet very effective alternative to taint tracking and symbolic execution to
+facilitate and optimize state-of-the-art feedback fuzzing that easily scales to large binary applications and unknown
+environments.  We observe that during the execution of a given program, parts of the input often end up directly (i.e.,
+nearly unmodified) in the program state. This input-to-state correspondence can be exploited to create a robust method
+to overcome common fuzzing roadblocks in a highly effective and efficient manner.  Our prototype implementation, called
+REDQUEEN, is able to solve magic bytes and (nested) checksum tests automatically for a given binary executable.
+Additionally, we show that our techniques outperform various state-of-the-art tools on a wide variety of targets across
+different privilege levels (kernel-space and userland) with no platform-specific code.  REDQUEEN is the first method to
+find more than 100% of the bugs planted in LAVA-M across all targets. Furthermore, we were able to discover 65 new bugs
+and obtained 16 CVEs in multiple programs and OS kernel drivers. Finally, our evaluation demonstrates that REDQUEEN is
+fast, widely applicable and outperforms concurrent approaches by up to three orders of magnitude.</p>
+</details></div>
+<pre tabindex="0"><code>@inproceedings{redqueen,
+  title={REDQUEEN: Fuzzing with Input-to-State Correspondence},
+  author={Aschermann, Cornelius and Schumilo, Sergej and Blazytko, Tim and Gawlik, Robert and Holz, Thorsten},
+  booktitle={Symposium on Network and Distributed System Security (NDSS)},
+  year={2019},
+}
+</code></pre><h2 id="nautilus-fishing-for-deep-bugs-with-grammars">NAUTILUS: Fishing for Deep Bugs with Grammars</h2>
+<div>
+<a href=nautilus.pdf>Paper</a>, 
+<a href=nautilus_slides.pdf>Slides</a>,
+<a href="https://www.youtube.com/watch?v=z0rpN_hxdnA">Talk</a>,
+<details>
+  <summary>Abstract</summary>
+<p>Fuzzing is a well-known method for efficiently identifying bugs in programs.  Unfortunately, when fuzzing targets that
+require highly-structured inputs such as interpreters, many fuzzing methods struggle to pass the syntax checks.  More
+specifically, interpreters often process inputs in multiple stages: first syntactic, then semantic correctness is
+checked. Only if these checks are passed, the interpreted code gets executed.  This prevents fuzzers from executing
+&ldquo;deeper&rdquo; - and hence potentially more interesting - code.  Typically two valid inputs that lead to the execution of
+different features in the target application require too many mutations for simple mutation-based fuzzers to discover:
+making small changes like bit flips usually only leads to the execution of error paths in the parsing engine.  So-called
+grammar fuzzers are able to pass the syntax checks by using Context-Free Grammars.  Using feedback can significantly
+increase the efficiency of fuzzing engines.  Hence, it is commonly used in state-of-the-art mutational fuzzers that do
+not use grammars.  Yet, grammar fuzzers do not make use of code coverage, i.e., they do not know whether any input
+triggers new functionality or not.</p>
+<p>In this paper, we propose NAUTILUS, a method to efficiently fuzz programs that require highly-structured inputs by
+combining the use of grammars with the use of code coverage feedback.  This allows us to recombine aspects of
+interesting inputs that were learned individually, and to dramatically increase the probability that any generated input
+will be accepted by the parser.  We implemented a proof-of-concept fuzzer that we tested on multiple targets, including
+ChakraCore (the JavaScript engine of Microsoft Edge), PHP, mruby, and Lua.  NAUTILUS identified multiple bugs in all of
+the targets: Seven in mruby, three in PHP, two in ChakraCore, and one in Lua.  Reporting these bugs was awarded with a
+sum of 2600 USD and 6 CVEs were assigned.  Our experiments show that combining context-free grammars and feedback-driven
+fuzzing significantly outperforms state-of-the-art approaches like American Fuzzy Lop (AFL) by an order of magnitude and
+grammar fuzzers by more than a factor of two when measuring code coverage.</p>
+</details></div>
+<pre tabindex="0"><code>@inproceedings{nautilus,
+  title={{Nautilus:  Fishing for Deep Bugs with Grammars}},
+  author={Aschermann, Cornelius and Frassetto, Tommaso and Holz, Thorsten and Jauernig, Patrick and Sadeghi, Ahmad-Reza and Teuchert, Daniel },
+  booktitle={Symposium on Network and Distributed System Security (NDSS)},
+  year={2019}
+}
+</code></pre><h2 id="grimoire-synthesizing-structure-while-fuzzing">GRIMOIRE: Synthesizing Structure while Fuzzing</h2>
+<div>
+<a href=grimoire.pdf>Paper</a>, 
+<a href=grimoire_slides.pdf>Slides</a>,
+<a href="https://www.youtube.com/watch?v=VF9YcAnzMPI">Talk</a>,
+<details>
+  <summary>Abstract</summary>
+<p>In the past few years, fuzzing has received significant attention from the research community. However, most of this
+attention was directed towards programs without a dedicated parsing stage. In such cases, fuzzers which leverage the
+input structure of a program can achieve a significantly higher code coverage compared to traditional fuzzing
+approaches. This advancement in coverage is achieved by applying large-scale mutations in the application&rsquo;s input space.
+However, this improvement comes at the cost of requiring expert domain knowledge, as these fuzzers depend on structure
+input specifications (e.g., grammars). Grammar inference, a technique which can automatically generate such grammars for
+a given program, can be used to address this shortcoming. Such techniques usually infer a program&rsquo;s grammar in a
+pre-processing step and can miss important structures that are uncovered only later during normal fuzzing.</p>
+<p>In this paper, we present the design and implementation of GRIMOIRE, a fully automated coverage-guided fuzzer which
+works without any form of human interaction or pre-configuration; yet, it is still able to efficiently test programs
+that expect highly structured inputs. We achieve this by performing large-scale mutations in the program input space
+using grammar-like combinations to synthesize new highly structured inputs without any pre-processing step. Our
+evaluation shows that GRIMOIRE outperforms other coverage-guided fuzzers when fuzzing programs with highly structured
+inputs. Furthermore, it improves upon existing grammar-based coverage-guided fuzzers. Using GRIMOIRE, we identified 19
+distinct memory corruption bugs in real-world programs and obtained 11 new CVEs.</p>
+</details></div>
+<pre tabindex="0"><code>@inproceedings{blazytko2019grimoire,
+    author = {Tim Blazytko and Cornelius Aschermann and Moritz Schl{\&#34;o}gel and Ali Abbasi and Sergej Schumilo and Simon W{\&#34;o}rner and Thorsten Holz},
+    title =  {{GRIMOIRE}: Synthesizing Structure while Fuzzing},,
+    year = {2019},
+    booktitle = {USENIX Security Symposium}
+}
+</code></pre><h2 id="ijon-exploring-deep-state-spaces-via-fuzzing">IJON: Exploring Deep State Spaces via Fuzzing</h2>
+<div>
+<a href=ijon.pdf>Paper</a>, 
+<a href=ijon_slides.pdf>Slides</a>,
+<a href="https://www.youtube.com/watch?v=XuyF-Jb2hQ4">Talk</a>,
+<details>
+  <summary>Abstract</summary>
+<p>Although current fuzz testing (fuzzing) methods are
+highly effective, there are still many situations such as complex
+state machines where fully automated approaches fail. State-of-
+the-art fuzzing methods offer very limited ability for a human
+to interact and aid the fuzzer in such cases. More specifically,
+most current approaches are limited to adding a dictionary or
+new seed inputs to guide the fuzzer. When dealing with complex
+programs, these mechanisms are unable to uncover new parts of
+the code base.
+In this paper, we propose IJON, an annotation mechanism
+that a human analyst can use to guide the fuzzer. In contrast
+to the two aforementioned techniques, this approach allows a
+more systematic exploration of the program’s behavior based on
+the data representing the internal state of the program. As a
+consequence, using only a small (usually one line) annotation, a
+user can help the fuzzer to solve previously unsolvable challenges.
+We extended various AFL-based fuzzers with the ability to
+annotate the source code of the target application with guidance
+hints. Our evaluation demonstrates that such simple annotations
+are able to solve problems that—to the best of our knowledge—
+no other current fuzzer or symbolic execution based tool can
+overcome. For example, with our extension, a fuzzer is able
+to play and solve games such as Super Mario Bros. or resolve
+more complex patterns such as hash map lookups. To further
+demonstrate the capabilities of our annotations, we use AFL
+combined with IJON to uncover both novel security issues and
+issues that previously required a custom and comprehensive
+grammar to be uncovered. Lastly, we show that using IJON and
+AFL, one can solve many challenges from the CGC data set that
+resisted all fully automated and human guided attempts so far.</p>
+</details></div>
+<pre tabindex="0"><code>@inproceedings{ijon,
+  author    = {Cornelius Aschermann and Sergej Schumilo and Ali Abbasi and Thorsten Holz},
+  title     = {Ijon: Exploring Deep State Spaces via Fuzzing},
+  booktitle = {IEEE Symposium on Security and Privacy},
+  year      = {2020},
+}
+</code></pre><h2 id="hyper-cube-high-dimensional-hypervisor-fuzzing">HYPER-CUBE: High-Dimensional Hypervisor Fuzzing</h2>
+<div>
+<a href=hypercube.pdf>Paper</a>, 
+<a href=hypercube_slides.pdf>Slides</a>,
+<a href="https://www.youtube.com/watch?v=GmIlLKT_nH8">Talk</a>,
+<details>
+  <summary>Abstract</summary>
+<p>Applying modern fuzzers to novel targets is often a very lucrative venture. Hypervisors are part of a very critical code
+base: compromising them could allow an attacker to compromise the whole cloud infrastructure of any cloud provider. In
+this paper, we build a novel fuzzer that aims explicitly at testing modern hypervisors.</p>
+<p>Our high throughput fuzzer design for long running interactive targets allows us to fuzz a large number of hypervisors,
+both open source, and proprietary. In contrast to one-dimensional fuzzers such as AFL, HYPER-CUBE can interact with any
+number of interfaces in any order.</p>
+<p>Our evaluation shows that we can find more bugs (over 2x) and coverage (as much as 2x) than state of the art hypervisor
+fuzzers. Additionally, in most cases, we were able to do so using multiple orders of magnitude less time than comparable
+fuzzers. HYPER-CUBE was also able to rediscover a set of well-known vulnerabilities for hypervisors, such as VENOM, in
+less than five minutes. In total, HYPER-CUBE found 54 novel bugs, and so far we obtained 37 CVEs.</p>
+<p>Our evaluation results demonstrates that next generation coverage-guided fuzzers should incorporate a higher-throughput
+design for long running targets such as hypervisors.</p>
+</details></div>
+<pre tabindex="0"><code>@inproceedings{hypercube,
+  title={{HYPER-CUBE: High-Dimensional Hypervisor Fuzzing}},
+  author={Schumilo, Sergej and Aschermann, Cornelius and Abbasi, Ali and W{\&#34;o}rner, Simon and Holz, Thorsten},
+  booktitle=isoc-ndss,
+  year={2020}
+}
+</code></pre><h2 id="nyx-greybox-hypervisor-fuzzing-using-fast-snapshots-and-affine-types">Nyx: Greybox Hypervisor Fuzzing using Fast Snapshots and Affine Types</h2>
+<div>
+<a href=nyx.pdf>Paper</a>, 
+<a href=nyx_slides.pdf>Slides</a>,
+<a href="https://www.youtube.com/watch?v=ZsW5_Ukzl_8">Talk</a>,
+<details>
+  <summary>Abstract</summary>
+<p>A hypervisor (also know as virtual machine monitor, VMM) enforces the security boundaries between different virtual
+machines (VMs) running on the same physical machine. A malicious user who is able to run her own kernel on a cloud VM
+can interact with a large variety of attack surfaces. Exploiting a software fault in any of these surfaces leads to full
+access to all other VMs that are co-located on the same host. Hence, the efficient detection of hypervisor
+vulnerabilities is crucial for the security of the modern cloud infrastructure. Recent work showed that blind fuzzing is
+the most efficient approach to identify security issues in hypervisors, mainly due to an outstandingly high test
+throughput.</p>
+<p>In this paper we present the design and implementation of NYX, a highly optimized, coverage-guided hypervisor fuzzer. We
+show how a fast snapshot restoration mechanism that allows us to reload the system under test thousands of times per
+second is key to performance. Furthermore, we introduce a novel mutation engine based on custom bytecode programs,
+encoded as directed acyclic graphs (DAG), and affine types, that enables the required flexibility to express complex
+interactions. Our evaluation shows that, while NYX has a lower throughput than the state-of-the-art hypervisor fuzzer,
+it performs competitively on simple targets: NYX typically requires only a few minutes longer to achieve the same test
+coverage. On complex devices, however, our approach is able to significantly outperform existing works. Moreover, we are
+able to uncover substantially more bugs: in total, we uncovered 44 new bugs with 22 CVEs requested. Our results
+demonstrate that coverage guidance is highly valuable, even if a blind fuzzer can be significantly faster.</p>
+</details></div>
+<pre tabindex="0"><code>@inproceedings {nyx,
+author = {Sergej Schumilo and Cornelius Aschermann and Ali Abbasi and Simon W{\&#34;o}r-ner and Thorsten Holz},
+title = {Nyx: Greybox Hypervisor Fuzzing using Fast Snapshots and Affine Types},
+booktitle = {30th {USENIX} Security Symposium ({USENIX} Security 21)},
+year = {2021},
+url = {https://www.usenix.org/conference/usenixsecurity21/presentation/schumilo},
+}
+</code></pre><h2 id="nyx-net-network-fuzzing-with-incremental-snapshots">Nyx-Net: Network Fuzzing with Incremental Snapshots</h2>
+<div>
+<a href="https://arxiv.org/pdf/2111.03013.pdf">Paper</a>, 
+<details>
+  <summary>Abstract</summary>
+<p>Coverage-guided fuzz testing (&ldquo;fuzzing&rdquo;) has become mainstream and we have observed lots of progress in this research
+area recently. However, it is still challenging to efficiently test network services with existing coverage-guided
+fuzzing methods. In this paper, we introduce the design and implementation of Nyx-Net, a novel snapshot-based fuzzing
+approach that can successfully fuzz a wide range of targets spanning servers, clients, games, and even Firefox&rsquo;s
+Inter-Process Communication (IPC) interface. Compared to state-of-the-art methods, Nyx-Net improves test throughput by
+up to 300x and coverage found by up to 70%. Additionally, Nyx-Net is able to find crashes in two of ProFuzzBench&rsquo;s
+targets that no other fuzzer found previously. When using Nyx-Net to play the game Super Mario, Nyx-Net shows speedups
+of 10-30x compared to existing work. Under some circumstances, Nyx-Net is even able play &ldquo;faster than light&rdquo;: solving
+the level takes less wall-clock time than playing the level perfectly even once. Nyx-Net is able to find previously
+unknown bugs in servers such as Lighttpd, clients such as MySQL client, and even Firefox&rsquo;s IPC mechanism - demonstrating
+the strength and versatility of the proposed approach. Lastly, our prototype implementation was awarded a $20.000 bug
+bounty for enabling fuzzing on previously unfuzzable code in Firefox and solving a long-standing problem at Mozilla.</p>
+</details></div>
+<pre tabindex="0"><code>@misc{nyxnet,
+      title={Nyx-Net: Network Fuzzing with Incremental Snapshots}, 
+      author={Sergej Schumilo and Cornelius Aschermann and Andrea Jemmett and Ali Abbasi and Thorsten Holz},
+      year={2021},
+      eprint={2111.03013},
+      archivePrefix={arXiv},
+      primaryClass={cs.CR}
+}
+</code></pre><h1 id="talks">Talks</h1>
+<p>We also gave presentations on the work behind Nyx at various other conferences and occasions:</p>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=Wy7qY5ms3qY">Blackhat Europe 2020</a></li>
+<li><a href="https://www.youtube.com/watch?v=jkNao0SjBAA">FuzzCon Europe 2020</a></li>
+<li><a href="https://www.youtube.com/watch?v=f5uhWesvjZ8">ViSP 2021</a></li>
+</ul>
+
+      </div>
+      
+      
+      
+    </section>
+    
+    
+  </div>
+  
+  
+  
+
+
+</body>
+
+</html>
