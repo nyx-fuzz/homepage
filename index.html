@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+  <title> Nyx </title>
+
+  <meta name="keywords" content="nyx,snapshot,fuzzer,kafl,redqueen">
+  <meta name="description" content="The homepage of the VM-based snapshot fuzzer Nyx.">
+
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="theme-color" content="#2D2D2D">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<meta name="generator" content="Hugo 0.68.3" />
+
+
+<link rel="stylesheet" href="https://nyx-fuzz.com/css/vec.css">
+
+
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+<link rel="shortcut icon" href="/favicon.ico">
+
+
+<link href="https://nyx-fuzz.com/index.xml" rel="alternate" type="application/rss+xml" title="Nyx" />
+
+
+</head>
+
+<body class="index">
+  <header>
+  <nav>
+    <ul>
+      
+      
+      <li class="pull-left current">
+        <a href="https://nyx-fuzz.com">/home/nyx</a>
+      </li>
+      
+      
+      <li class="pull-left ">
+        <a href="/papers">~/papers</a>
+      </li>
+      
+      
+      <li class="pull-left ">
+        <a href="/about_us">~/about_us</a>
+      </li>
+      
+      
+      <li class="pull-left ">
+        <a href="https://github.com/nyx-fuzz/nyx">~/github</a>
+      </li>
+      
+  
+      <li class="pull-right"><a href="https://nyx-fuzz.com/index.xml"><i class="fas fa-rss"></i></a></li>
+    </ul>
+  </nav>
+</header>
+
+  <section class="user-profile">
+    <a class="logo-github" href = "https://github.com/nyx-fuzz/nyx" title ="Github">
+    <figure class="user-avatar">
+      <img alt="avatar" src="img/logo.png">
+      <figcaption class="user-socials">
+        
+        
+        
+        
+
+      </figcaption>
+    </figure>
+    <p class="user-motivation">To boldy fuzz what no other tool can fuzz</p>
+    </a>
+  </section>
+
+  <div class="content wide">
+    <h1 id="what-kind-of-fuzzer-is--nyx">What kind of Fuzzer is  Nyx?</h1>
+<p>Nyx is a new fuzzing engine that allows you to harness and fuzz complex, stateful targets. By snapshotting a
+whole VM and being able to reset it to a clean state many thousand times per second, Nyx allows you to fuzz complex
+stateful targets such as browsers, operating systems or even hypervisors with zero hassle:
+You don&rsquo;t have to reset the file system or even the
+kernel state - everything gets reset automatically after each test.
+You don&rsquo;t even need to restart the target after crashes, it will be restored just like any other side effect of the
+execution.</p>
+<p>While Nyx has its own fuzzing logic, it&rsquo;s very easy to build your own fuzzer on top of Nyx&rsquo;s snapshot capabilities - you can already easily combine the backend with many available fuzzer frontends such as AFL++ or
+Nauitlus depending on your needs.</p>
+<h1 id="robustness">Robustness</h1>
+<img class="inline-img" align="right" width="300" src="img/snap.gif">
+Even "simple" targets like a shell are hard to fuzz with existing fuzzers. When running random commands a shell will
+find a million ways to break the environment: wiping the filesystem, OOM, fork-bombs, killing the
+parent process and many more. 
+<p>Nyx can fuzz almost anything you can run in KVM: We have successfully fuzzed browsers, operating systems, graphical games and hypervisors using Nyx. Targets as simple as a shell can be fuzzed just by dropping the binary in the fuzzer (if your hardware supports Intel-PT for coverage).</p>
+<h1 id="performance">Performance</h1>
+<img class="inline-img" align="right" width="300" src="img/mario.gif">
+<p>Not only is Nyx build on top of highly optimized components such as <code>libxdc</code> and fast on it&rsquo;s own, by taking the snapshot right before your target consumes the input, you can shave of
+significant amounts of time over restarting the target - when fuzzing a browser, you don&rsquo;t have to wait 10 seconds for the restart - the next snapshot is ready in a fraction of a microsecond.
+Even better: When you fuzz slow targets that consume multiple packets in a row (e.g. network services, operating systems,
+hypervisors, GUI applications, web servers or games) you can use incremental snapshots: creating a snapshot is just as
+fast as restoring a snapshot, and you can create temporary snapshots after the first n packets to fuzz the remaining
+packets. On particularly slow targets this can get you a 10x or more speedup!</p>
+<h1 id="integration">Integration</h1>
+<p>Building your own fuzzing logic on top of Nyx is easy: Using <code>libnyx</code> you can build a simple fuzzer that can target
+almost anything in just some 20 lines of C, Rust or Python. We have used this to integrate Nyx not only with our own
+fuzzing engine but also wit Nautilus and AFL++.</p>
+<h1 id="success-stories">Success Stories</h1>
+<img class="inline-img" align="right" width="300" src="img/css.gif">
+<p>Nyx is now used by large companies: Intel is actively maintaining an fork of an older version of our codebase and
+uses it to find bugs in targets ranging from hypervisors to firmware.
+Similarly, Mozilla is currently integrating Nyx into Firefox CI, as Nyx is the first fuzzer that&rsquo;s able to target the
+complex and stateful IPC interfaces in a robust way.</p>
+<p>We have also found a significant number of bugs in targets ranging from shells such as bash, zsh, fish, programming languages
+such as Ruby, PHP or V8 (Javascript), games such as counterstrike source, kernel modules such as file system drivers in
+Windows, macOS and linux and even hypervisors such as Virtual Box and KVM/QEMU:</p>
+<img class="success-img" src="img/bugs.png">
+
+  </div>
+
+</body>
+</html>

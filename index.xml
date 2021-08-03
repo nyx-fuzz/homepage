@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Nyx</title>
+    <link>https://nyx-fuzz.com/</link>
+    <description>Recent content on Nyx</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 03 Nov 2021 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://nyx-fuzz.com/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Hello World</title>
+      <link>https://nyx-fuzz.com/post/init/</link>
+      <pubDate>Wed, 03 Nov 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://nyx-fuzz.com/post/init/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://nyx-fuzz.com/about_us/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://nyx-fuzz.com/about_us/</guid>
+      <description>About Us Sergej Schumilo Sergej is a low level hacker that specialized in making fuzzers go fast by exploiting the intricacies of modern CPU&amp;rsquo;s. He has an unreasonable understanding of the Intel architecture (and has been known to know the relevant page numbers in the intel&amp;rsquo;s software developer manual by heart). In short, he enjoys everything happening below ring 0.
+ Twitter  Github  Homepage  Email
+Dr.-Ing. Cornelius Aschermann Cornelius is a security researcher that focuses on program analysis and automated bug finding.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://nyx-fuzz.com/papers/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://nyx-fuzz.com/papers/</guid>
+      <description>Research Nyx fuzzer was developed at Ruhr University Bochum as a research project by Sergej Schumilo and Cornelius Aschermann and many co-oauthors: Thorsten Holz, Ali Abbasi, Simon Woerner, Moritz Schloengel, Robert Gawlik, Sebastian Schinzel, Tim Blazytko, Ahmad-Reza Sadeghi, Daniel Teuchert, Patrick Jauernig, and Tommaso Frassetto. The technology powering Nyx was documented and published by multiple papers.
+kAFL: Hardware-Assisted Feedback Fuzzing for OS Kernels  Paper, Slides, Talk,  Abstract Many kinds of memory safety vulnerabilities have been endangering software systems for decades.</description>
+    </item>
+    
+  </channel>
+</rss>
